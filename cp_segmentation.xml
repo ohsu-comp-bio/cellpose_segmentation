@@ -1,0 +1,92 @@
+<tool id="cp_segmentation" name="Cellpose" version="@VERSION@" profile="19.09">
+    <description>a generalist algorithm for cell and nucleus segmentation</description>
+    <macros>
+        <token name="@VERSION@">0.1</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="3.7">python</requirement>
+        <requirement type="package" version="v0.0.1.25">cellpose</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool Standard Error"/>
+    </stdio>
+    <version_command>echo "@VERSION@"</version_command>
+    <command>
+        <![CDATA[
+        iname=image.${img_in.ext};
+        ln -s '${img_in}' ./\$iname;
+        mkdir -p segmentation;
+
+        python '$__tool_directory__/cp_segmentation.py'
+            --inputs '$inputs'
+            --img_path "`pwd`/\$iname"
+            --img_format '${img_in.ext}'
+            --output_dir "`pwd`/segmentation"
+
+        ]]>
+    </command>
+    <configfiles>
+        <inputs name="inputs" />
+    </configfiles>
+    <inputs>
+         <param name="img_in" type="data" format="tiff,jpeg,png" label="Choose the image file for segmention (usually after registration)"/>
+         <conditional name="model_selector">
+            <param name="model_type" type="select" label="Choose a pre-trained model">
+                <option value="nuclei" selected="true">nuclei</option>
+                <option value="cyto">cyto</option>
+            </param>
+            <when value="nuclei">
+                <param name="chan" value="0" type="integer" min="0" label="Type in the channel to segment" help="Ordinal number. Starting from 0."/>
+                <param name="chan2" value="0" type="hidden" />
+            </when>
+            <when value="cyto">
+                <param name="chan" value="0" type="integer" min="0" max="3" label="Type in the channel to segment" help="0=grayscale, 1=red, 2=green, 3=blue"/>
+                <param name="chan2" value="0" type="integer" optional="true" label="Type in the channel for nuclei segmatation (Optional)" help="0=None (will set to zero), 1=red, 2=green, 3=blue"/>
+            </when>
+         </conditional>
+         <section name="options" title="Advanced Options" expanded="False">
+            <param argument="diameter" type="float" value="30" optional="true" help="Cell or nuclei diameter in pixels. Leave blank for automated estimation."/>
+            <param argument="invert" type="boolean" truevalue="booltrue" falsevalue="boolfalse" checked="false" help="Whether to invert image pixel intensity before running network?"/>
+            <param argument="do_3D" type="boolean" truevalue="booltrue" falsevalue="boolfalse" checked="false" help="Whether to run 3D segmentation on 4D image input?"/>
+            <param argument="net_avg" type="boolean" truevalue="booltrue" falsevalue="boolfalse" checked="true" help="Whether to run the 4 built-in networks and averages them?"/>
+            <param argument="tile" type="boolean" truevalue="booltrue" falsevalue="boolfalse" checked="true" help="Tiles image for test time augmentation and to ensure GPU memory usage limited (recommended)"/>
+            <param argument="flow_threshold" type="float" value="0.4" help="Flow error threshold (all cells with errors below threshold are kept) (not used for 3D)"/>
+            <param argument="cellprob_threshold" type="float" value="0." help="Cell probability threshold (all pixels with prob above threshold kept for masks)"/>
+            <param argument="rescale" type="float" value="" optional="true" help="If diameter is set to None, and rescale is not None, then rescale is used instead of diameter for resizing image"/>
+         </section>
+    </inputs>
+    <outputs>
+        <data format="tiff" name="cp_mask" from_work_dir="segmentation/cp_mask.tif" label="Cellpose Masks"/>
+        <data format="png" name="cp_segm" from_work_dir="segmentation/cp_segm.png" label="Segmentation Show"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="img_in" value="img02.png"/>
+            <param name="model_type" value="cyto"/>
+            <param name="chan" value="2"/>
+            <param name="chan2" value="3"/>
+            <param name="diameter" value=""/>
+            <output name="cp_mask" file="img02_cp_mask.tif" compare="sim_size" delta="10"/>
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+        Cellpose: A generalist algorithm for cell and nucleus segmentation.
+        ]]>
+    </help>
+    <citations>
+        <citation type="bibtex">
+            @article {Stringer2020.02.02.931238,
+                author = {Stringer, Carsen and Michaelos, Michalis and Pachitariu, Marius},
+                title = {Cellpose: a generalist algorithm for cellular segmentation},
+                elocation-id = {2020.02.02.931238},
+                year = {2020},
+                doi = {10.1101/2020.02.02.931238},
+                publisher = {Cold Spring Harbor Laboratory},
+                URL = {https://www.biorxiv.org/content/early/2020/02/03/2020.02.02.931238},
+                eprint = {https://www.biorxiv.org/content/early/2020/02/03/2020.02.02.931238.full.pdf},
+                journal = {bioRxiv}
+            }
+        </citation>
+    </citations>
+</tool>
