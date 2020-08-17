@@ -31,12 +31,12 @@
     <inputs>
          <param name="img_in" type="data" format="tiff,jpeg,png" label="Choose the image file for segmention (usually after registration)"/>
          <conditional name="model_selector">
-            <param name="model_type" type="select" label="Choose a pre-trained model">
+            <param name="model_type" type="select" label="Choose the pre-trained model type">
                 <option value="nuclei" selected="true">nuclei</option>
                 <option value="cyto">cyto</option>
             </param>
             <when value="nuclei">
-                <param name="chan" value="0" type="integer" min="0" label="Type in the channel to segment" help="Ordinal number. Starting from 0."/>
+                <param name="chan" value="0" type="integer" min="0" label="Type in the channel to segment" help="Integer. If 0, all channels are fused; if greater than 0, corresponds to the channel index number (starting from 1) to be extracted."/>
                 <param name="chan2" value="0" type="hidden" />
             </when>
             <when value="cyto">
