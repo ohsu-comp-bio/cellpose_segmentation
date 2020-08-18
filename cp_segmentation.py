@@ -41,11 +41,6 @@ def main(inputs, img_path, img_format, output_dir):
     model = models.Cellpose(gpu=False, model_type=model_type)
 
     options = params['options']
-    options.pop('flow_threshold')
-    options.pop('cellprob_threshold')
-    
-    import inspect
-    print(inspect.getargspec(model.eval))
 
     masks, flows, styles, diams = model.eval(img, channels=[chan, chan2],
                                              **options)

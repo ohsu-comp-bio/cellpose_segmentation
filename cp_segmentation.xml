@@ -4,8 +4,7 @@
         <token name="@VERSION@">0.1</token>
     </macros>
     <requirements>
-        <requirement type="package" version="3.7">python</requirement>
-        <requirement type="package" version="v0.0.1.25">cellpose</requirement>
+        <requirement type="package" version="0.0.2.8">cellpose</requirement>
     </requirements>
     <stdio>
         <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool Standard Error"/>
@@ -56,8 +55,8 @@
          </section>
     </inputs>
     <outputs>
-        <data format="tiff" name="cp_mask" from_work_dir="segmentation/cp_mask.tif" label="Cellpose Masks"/>
-        <data format="png" name="cp_segm" from_work_dir="segmentation/cp_segm.png" label="Segmentation Show"/>
+        <data format="tiff" name="cp_mask" from_work_dir="segmentation/cp_masks.tif" label="Cellpose Masks"/>
+        <data format="png" name="cp_segm" from_work_dir="segmentation/segm_show.png" label="Segmentation Show"/>
     </outputs>
     <tests>
         <test>
