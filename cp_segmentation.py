@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import os
 import warnings
 
-from cellpose import models, plot
+from cellpose import models, plot, transforms
 
 
 def main(inputs, img_path, img_format, output_dir):
@@ -37,12 +37,16 @@ def main(inputs, img_path, img_format, output_dir):
     model_type = model_selector['model_type']
     chan = model_selector['chan']
     chan2 = model_selector['chan2']
+    if chan is None:
+        channels = None
+    else:
+        channels = [int(chan), int(chan2) if chan2 is not None else None]
 
     model = models.Cellpose(gpu=False, model_type=model_type)
 
     options = params['options']
 
-    masks, flows, styles, diams = model.eval(img, channels=[chan, chan2],
+    masks, flows, styles, diams = model.eval(img.copy(), channels=channels,
                                              **options)
 
     # save masks to tiff
@@ -51,12 +55,17 @@ def main(inputs, img_path, img_format, output_dir):
         skimage.io.imsave(os.path.join(output_dir, 'cp_masks.tif'),
                           masks.astype(np.uint16))
 
-    # make segmentation show
+    # make segmentation show #
+
+    # uniform image
+    if img_format == 'tiff' and img.ndim == 3 and channels is not None:
+        img = transforms.reshape(img, channels=channels, invert=options['invert'])
+
     maski = masks
     flowi = flows[0]
     fig = plt.figure(figsize=(12, 3))
     # can save images (set save_dir=None if not)
-    plot.show_segmentation(fig, img, maski, flowi)
+    plot.show_segmentation(fig, img, maski, flowi, channels=channels)
     fig.savefig(os.path.join(output_dir, 'segm_show.png'), dpi=300)
     plt.close(fig)
 

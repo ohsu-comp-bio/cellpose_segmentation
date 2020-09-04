@@ -4,7 +4,7 @@
         <token name="@VERSION@">0.1</token>
     </macros>
     <requirements>
-        <requirement type="package" version="0.0.2.8">cellpose</requirement>
+        <requirement type="package" version="0.0.3.1">cellpose</requirement>
     </requirements>
     <stdio>
         <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool Standard Error"/>
@@ -35,11 +35,11 @@
                 <option value="cyto">cyto</option>
             </param>
             <when value="nuclei">
-                <param name="chan" value="0" type="integer" min="0" label="Type in the channel to segment" help="Integer. If 0, all channels are fused; if greater than 0, corresponds to the channel index number (starting from 1) to be extracted."/>
+                <param name="chan" value="0" type="integer" optional="true" label="Type in the channel to segment" help="Integer. If 0, all channels are fused; if greater than 0, corresponds to the channel index number (starting from 1) to be extracted. Leave blank for None"/>
                 <param name="chan2" value="0" type="hidden" />
             </when>
             <when value="cyto">
-                <param name="chan" value="0" type="integer" min="0" max="3" label="Type in the channel to segment" help="0=grayscale, 1=red, 2=green, 3=blue"/>
+                <param name="chan" value="0" type="integer" optional="true" label="Type in the channel to segment" help="0=grayscale, 1=red, 2=green, 3=blue"/>
                 <param name="chan2" value="0" type="integer" optional="true" label="Type in the channel for nuclei segmatation (Optional)" help="0=None (will set to zero), 1=red, 2=green, 3=blue"/>
             </when>
          </conditional>
@@ -55,8 +55,8 @@
          </section>
     </inputs>
     <outputs>
-        <data format="tiff" name="cp_mask" from_work_dir="segmentation/cp_masks.tif" label="Cellpose Masks"/>
-        <data format="png" name="cp_segm" from_work_dir="segmentation/segm_show.png" label="Segmentation Show"/>
+        <data format="tiff" name="cp_mask" from_work_dir="segmentation/cp_masks.tif" label="Cellpose Masks on ${on_string}"/>
+        <data format="png" name="cp_segm" from_work_dir="segmentation/segm_show.png" label="Segmentation Show on ${on_string}"/>
     </outputs>
     <tests>
         <test>
