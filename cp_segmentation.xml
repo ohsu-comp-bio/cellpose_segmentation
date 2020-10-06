@@ -1,4 +1,4 @@
-<tool id="cp_segmentation" name="Cellpose" version="@VERSION@" profile="19.09">
+<tool id="cp_segmentation" name="Cellpose" version="@VERSION@">
     <description>a generalist algorithm for cell and nucleus segmentation</description>
     <macros>
         <token name="@VERSION@">0.1</token>
