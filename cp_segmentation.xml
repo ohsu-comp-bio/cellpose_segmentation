@@ -67,7 +67,7 @@
             <param name="chan" value="2"/>
             <param name="chan2" value="3"/>
             <param name="diameter" value=""/>
-            <output name="cp_mask" file="img02_cp_mask.tif" compare="sim_size" delta="10"/>
+            <output name="cp_mask" file="img02_cp_masks.tif" compare="sim_size" delta="50"/>
         </test>
     </tests>
     <help>
