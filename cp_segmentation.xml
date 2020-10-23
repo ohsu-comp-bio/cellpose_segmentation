@@ -1,7 +1,7 @@
 <tool id="cp_segmentation" name="Cellpose" version="@VERSION@">
     <description>a generalist algorithm for cell and nucleus segmentation</description>
     <macros>
-        <token name="@VERSION@">0.1</token>
+        <token name="@VERSION@">0.2</token>
     </macros>
     <requirements>
         <requirement type="package" version="0.0.3.1">cellpose</requirement>
@@ -30,7 +30,7 @@
         <inputs name="inputs" />
     </configfiles>
     <inputs>
-         <param name="img_in" type="data" format="tiff,jpeg,png" label="Choose the image file for segmention (usually after registration)"/>
+         <param name="img_in" type="data" format="ome.tiff,tiff,jpeg,png" label="Choose the image file for segmention (usually after registration)"/>
          <conditional name="model_selector">
             <param name="model_type" type="select" label="Choose the pre-trained model type">
                 <option value="nuclei" selected="true">nuclei</option>

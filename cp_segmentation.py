@@ -18,7 +18,7 @@ def main(inputs, img_path, img_format, output_dir):
     img_path : str
         File path for the input image
     img_format : str
-        One of the ['tiff', 'png', 'jpg']
+        One of the ['ome.tiff', 'tiff', 'png', 'jpg']
     output_dir : str
         Folder to save the outputs.
     """
@@ -30,7 +30,7 @@ def main(inputs, img_path, img_format, output_dir):
     img = skimage.io.imread(img_path)
 
     # transpose to Ly x Lx x nchann
-    if img_format == 'tiff' and img.ndim == 3:
+    if img_format.endswith('tiff') and img.ndim == 3:
         img = np.transpose(img, (1, 2, 0))
 
     model_selector = params['model_selector']
@@ -58,7 +58,7 @@ def main(inputs, img_path, img_format, output_dir):
     # make segmentation show #
 
     # uniform image
-    if img_format == 'tiff' and img.ndim == 3 and channels is not None:
+    if img_format.endswith('tiff') and img.ndim == 3 and channels is not None:
         img = transforms.reshape(img, channels=channels, invert=options['invert'])
 
     maski = masks
