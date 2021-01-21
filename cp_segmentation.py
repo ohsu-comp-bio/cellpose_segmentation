@@ -29,10 +29,12 @@ def main(inputs, img_path, img_format, output_dir):
 
     img = skimage.io.imread(img_path)
 
-    # transpose to Ly x Lx x nchann
-    if img_format.endswith('tiff') and img.ndim == 3:
+    # transpose to Ly x Lx x nchann and reshape based on channels
+    if img_format.endswith('tiff') and params['channel_first']:
         img = np.transpose(img, (1, 2, 0))
+        img = transforms.reshape(img, channels=channels)
 
+    gpu = params['use_gpu']
     model_selector = params['model_selector']
     model_type = model_selector['model_type']
     chan = model_selector['chan']
@@ -42,11 +44,11 @@ def main(inputs, img_path, img_format, output_dir):
     else:
         channels = [int(chan), int(chan2) if chan2 is not None else None]
 
-    model = models.Cellpose(gpu=False, model_type=model_type)
-
     options = params['options']
 
-    masks, flows, styles, diams = model.eval(img.copy(), channels=channels,
+    model = models.Cellpose(gpu=gpu, model_type=model_type,
+                            net_avg=options['net_avg'])
+    masks, flows, styles, diams = model.eval(img, channels=channels,
                                              **options)
 
     # save masks to tiff
@@ -56,18 +58,19 @@ def main(inputs, img_path, img_format, output_dir):
                           masks.astype(np.uint16))
 
     # make segmentation show #
+    if params['show_segmentation']:
+        img = skimage.io.imread(img_path)
+        # uniform image
+        if img_format.endswith('tiff') and params['channel_first']:
+            img = transforms.reshape(img, channels=channels)
 
-    # uniform image
-    if img_format.endswith('tiff') and img.ndim == 3 and channels is not None:
-        img = transforms.reshape(img, channels=channels, invert=options['invert'])
-
-    maski = masks
-    flowi = flows[0]
-    fig = plt.figure(figsize=(12, 3))
-    # can save images (set save_dir=None if not)
-    plot.show_segmentation(fig, img, maski, flowi, channels=channels)
-    fig.savefig(os.path.join(output_dir, 'segm_show.png'), dpi=300)
-    plt.close(fig)
+        maski = masks
+        flowi = flows[0]
+        fig = plt.figure(figsize=(12, 3))
+        # can save images (set save_dir=None if not)
+        plot.show_segmentation(fig, img, maski, flowi, channels=channels)
+        fig.savefig(os.path.join(output_dir, 'segm_show.png'), dpi=300)
+        plt.close(fig)
 
 
 if __name__ == '__main__':
