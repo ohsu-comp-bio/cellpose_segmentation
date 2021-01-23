@@ -41,11 +41,14 @@ def main(inputs, img_path, img_format, output_dir):
 
     img = skimage.io.imread(img_path)
 
+    print(f"Image shape: {img.shape}")
     # transpose to Ly x Lx x nchann and reshape based on channels
     if img_format.endswith('tiff') and params['channel_first']:
         img = np.transpose(img, (1, 2, 0))
         img = transforms.reshape(img, channels=channels)
+        channels = [1, 2]
 
+    print(f"Image shape: {img.shape}")
     model = models.Cellpose(gpu=gpu, model_type=model_type,
                             net_avg=options['net_avg'])
     masks, flows, styles, diams = model.eval(img, channels=channels,
@@ -62,7 +65,9 @@ def main(inputs, img_path, img_format, output_dir):
         img = skimage.io.imread(img_path)
         # uniform image
         if img_format.endswith('tiff') and params['channel_first']:
+            img = np.transpose(img, (1, 2, 0))
             img = transforms.reshape(img, channels=channels)
+            channels = [1, 2]
 
         maski = masks
         flowi = flows[0]
