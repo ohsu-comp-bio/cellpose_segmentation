@@ -27,13 +27,6 @@ def main(inputs, img_path, img_format, output_dir):
     with open(inputs, 'r') as param_handler:
         params = json.load(param_handler)
 
-    img = skimage.io.imread(img_path)
-
-    # transpose to Ly x Lx x nchann and reshape based on channels
-    if img_format.endswith('tiff') and params['channel_first']:
-        img = np.transpose(img, (1, 2, 0))
-        img = transforms.reshape(img, channels=channels)
-
     gpu = params['use_gpu']
     model_selector = params['model_selector']
     model_type = model_selector['model_type']
@@ -45,6 +38,13 @@ def main(inputs, img_path, img_format, output_dir):
         channels = [int(chan), int(chan2) if chan2 is not None else None]
 
     options = params['options']
+
+    img = skimage.io.imread(img_path)
+
+    # transpose to Ly x Lx x nchann and reshape based on channels
+    if img_format.endswith('tiff') and params['channel_first']:
+        img = np.transpose(img, (1, 2, 0))
+        img = transforms.reshape(img, channels=channels)
 
     model = models.Cellpose(gpu=gpu, model_type=model_type,
                             net_avg=options['net_avg'])
