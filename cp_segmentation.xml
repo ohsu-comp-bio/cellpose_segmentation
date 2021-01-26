@@ -23,6 +23,7 @@
         ln -s '${img_in}' ./\$iname;
         mkdir -p segmentation;
 
+        HOME=$__tool_data_path__ &&
         python '$__tool_directory__/cp_segmentation.py'
             --inputs '$inputs'
             --img_path "`pwd`/\$iname"
