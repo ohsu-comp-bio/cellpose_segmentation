@@ -1,8 +1,7 @@
-FROM ubuntu:20.04
+FROM python:3.8-slim
 
-ENV VERSION=0.6
+ENV VERSION=0.7.2 NUMBA_CACHE_DIR=/tmp
 RUN apt-get update && \
-    apt-get install -y git python3 python3-pip unzip wget && \
-    ln -s /usr/bin/python3 /usr/bin/python
+    apt-get install -y git unzip wget 
 
-RUN pip install cellpose==$VERSION opencv-python-headless==4.5.1.48 scikit-image==0.17.2 matplotlib==3.3.3
+RUN pip install cellpose==$VERSION 'scikit-learn>1.0, <1.1' 'opencv-python-headless==4.5.1.48' 'scikit-image>0.17, <0.19'

@@ -1,15 +1,13 @@
 <tool id="cp_segmentation" name="Cellpose" version="@VERSION@">
     <description>a generalist algorithm for cell and nucleus segmentation</description>
     <macros>
-        <token name="@VERSION@">0.6</token>
+        <token name="@VERSION@">0.7.2</token>
     </macros>
     <requirements>
-        <requirement type="package" version="0.6">cellpose</requirement>
+        <container type="docker">quay.io/qiagu/cellpose:v0.7.2</container>
+        <requirement type="package" version="0.7.2">cellpose</requirement>
         <requirement type="package" version="4.5.1.48">opencv-python-headless</requirement>
-        <!--requirement type="package" version="1.6.0">mxnet-mkl</requirement-->
-        <!--requirement type="package" version="1.7.1">pytorch</requirement-->
-        <requirement type="package" version="0.17.2">scikit-image</requirement>
-        <requirement type="package" version="3.3.3">matplotlib</requirement>
+        <requirement type="package" version="1.0.1">scikit-learn</requirement>
         <!--requirement type="package" version="10.2">cudatoolkit</requirement>
         <requirement type="package">cudnn</requirement-->
     </requirements>
@@ -24,6 +22,7 @@
         mkdir -p segmentation;
 
         HOME=$__tool_data_path__ &&
+        ##HOME=/tmp &&
         python '$__tool_directory__/cp_segmentation.py'
             --inputs '$inputs'
             --img_path "`pwd`/\$iname"
