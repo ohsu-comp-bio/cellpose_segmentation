@@ -1,11 +1,11 @@
 <tool id="cp_segmentation" name="Cellpose" version="@VERSION@">
     <description>a generalist algorithm for cell and nucleus segmentation</description>
     <macros>
-        <token name="@VERSION@">0.7.2</token>
+        <token name="@VERSION@">0.7.3</token>
     </macros>
     <requirements>
-        <container type="docker">quay.io/qiagu/cellpose:v0.7.2</container>
-        <requirement type="package" version="0.7.2">cellpose</requirement>
+        <container type="docker">quay.io/qiagu/cellpose:v@VERSION@</container>
+        <requirement type="package" version="@VERSION@">cellpose</requirement>
         <requirement type="package" version="4.5.1.48">opencv-python-headless</requirement>
         <requirement type="package" version="1.0.1">scikit-learn</requirement>
         <!--requirement type="package" version="10.2">cudatoolkit</requirement>
