@@ -28,6 +28,7 @@ def main(inputs, img_path, img_format, output_dir):
         params = json.load(param_handler)
 
     gpu = params['use_gpu']
+    omni=params['omni']
     model_selector = params['model_selector']
     model_type = model_selector['model_type']
     chan = model_selector['chan']
@@ -50,9 +51,10 @@ def main(inputs, img_path, img_format, output_dir):
 
     print(f"Image shape: {img.shape}")
     model = models.Cellpose(gpu=gpu, model_type=model_type,
-                            net_avg=options['net_avg'])
+                            net_avg=options['net_avg'],
+                            omni=omni)
     masks, flows, styles, diams = model.eval(img, channels=channels,
-                                             **options)
+                                             omni=omni, **options)
 
     # save masks to tiff
     with warnings.catch_warnings():
