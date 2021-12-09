@@ -1,7 +1,7 @@
 <tool id="cp_segmentation" name="Cellpose" version="@VERSION@">
     <description>a generalist algorithm for cell and nucleus segmentation</description>
     <macros>
-        <token name="@VERSION@">0.7.3</token>
+        <token name="@VERSION@">0.7.2</token>
     </macros>
     <requirements>
         <container type="docker">quay.io/goeckslab/cellpose:v@VERSION@</container>

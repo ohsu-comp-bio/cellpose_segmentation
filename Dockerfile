@@ -1,6 +1,6 @@
 FROM python:3.8-slim
 
-ENV CELLPOSE_VERSION=0.7.3 NUMBA_CACHE_DIR=/tmp
+ENV CELLPOSE_VERSION=0.7.2 NUMBA_CACHE_DIR=/tmp
 RUN apt-get update && \
     apt-get install -y --no-install-recommends git unzip wget &&\
     apt-get clean
