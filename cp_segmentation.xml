@@ -4,7 +4,7 @@
         <token name="@VERSION@">0.7.3</token>
     </macros>
     <requirements>
-        <container type="docker">quay.io/qiagu/cellpose:v@VERSION@</container>
+        <container type="docker">quay.io/goeckslab/cellpose:v@VERSION@</container>
         <requirement type="package" version="@VERSION@">cellpose</requirement>
         <requirement type="package" version="4.5.1.48">opencv-python-headless</requirement>
         <requirement type="package" version="1.0.1">scikit-learn</requirement>
