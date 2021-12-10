@@ -18,7 +18,7 @@
     <command>
         <![CDATA[
         export HOME="`pwd`" &&
-        export CELLPOSE_LOCAL_MODELS_PATH='$__tool_data_path__' &&
+        export CELLPOSE_LOCAL_MODELS_PATH='$__tool_data_path__/.cellpose/models' &&
         iname=image.${img_in.ext};
         ln -s '${img_in}' ./\$iname;
         mkdir -p segmentation;
