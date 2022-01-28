@@ -1,13 +1,15 @@
 <tool id="cp_segmentation" name="Cellpose" version="@VERSION@">
     <description>a generalist algorithm for cell and nucleus segmentation</description>
     <macros>
-        <token name="@VERSION@">0.7.2</token>
+        <token name="@VERSION@">1.0.0</token>
     </macros>
     <requirements>
         <container type="docker">quay.io/goeckslab/cellpose:@VERSION@</container>
         <requirement type="package" version="@VERSION@">cellpose</requirement>
-        <requirement type="package" version="4.5.1.48">opencv-python-headless</requirement>
-        <requirement type="package" version="1.0.1">scikit-learn</requirement>
+        <requirement type="package" version="4.5.5">opencv-python-headless</requirement>
+        <requirement type="package" version="1.0">scikit-learn</requirement>
+        <requirement type="package" version="0.19">scikit-image</requirement>
+        <requirement type="package" version="0.1">model-unpickler</requirement>
         <!--requirement type="package" version="10.2">cudatoolkit</requirement>
         <requirement type="package">cudnn</requirement-->
     </requirements>
