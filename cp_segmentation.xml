@@ -1,4 +1,4 @@
-<tool id="cp_segmentation" name="Cellpose" version="@VERSION@">
+<tool id="cp_segmentation" name="Cellpose" version="@VERSION@" profile="21.05">
     <description>a generalist algorithm for cell and nucleus segmentation</description>
     <macros>
         <token name="@VERSION@">1.0.0</token>
@@ -19,17 +19,15 @@
     <version_command>echo "@VERSION@"</version_command>
     <command>
         <![CDATA[
-        export HOME="`pwd`" &&
         export CELLPOSE_LOCAL_MODELS_PATH='$__tool_data_path__/.cellpose/models' &&
-        iname=image.${img_in.ext};
-        ln -s '${img_in}' ./\$iname;
-        mkdir -p segmentation;
+        mkdir -p segmentation &&
+        ln -s '${img_in}' ./image.${img_in.ext} &&
+
         python '$__tool_directory__/cp_segmentation.py'
             --inputs '$inputs'
-            --img_path "`pwd`/\$iname"
+            --img_path ./image.${img_in.ext}
             --img_format '${img_in.ext}'
-            --output_dir "`pwd`/segmentation"
-
+            --output_dir ./segmentation
         ]]>
     </command>
     <configfiles>
@@ -44,7 +42,8 @@
                 <option value="cyto">cyto</option>
             </param>
             <when value="nuclei">
-                <param name="chan" value="0" type="integer" optional="true" label="Type in the channel to segment" help="Integer. If 0, all channels are fused; if greater than 0, corresponds to the channel index number (starting from 1) to be extracted. Leave blank for None"/>
+                <param name="chan" value="0" type="integer" optional="true" label="Type in the channel to segment"
+                    help="Integer. If 0, all channels are fused; if greater than 0, corresponds to the channel index number (starting from 1) to be extracted. Leave blank for None"/>
                 <param name="chan2" value="0" type="hidden" />
             </when>
             <when value="cyto">
@@ -89,18 +88,6 @@
         ]]>
     </help>
     <citations>
-        <citation type="bibtex">
-            @article {Stringer2020.02.02.931238,
-                author = {Stringer, Carsen and Michaelos, Michalis and Pachitariu, Marius},
-                title = {Cellpose: a generalist algorithm for cellular segmentation},
-                elocation-id = {2020.02.02.931238},
-                year = {2020},
-                doi = {10.1101/2020.02.02.931238},
-                publisher = {Cold Spring Harbor Laboratory},
-                URL = {https://www.biorxiv.org/content/early/2020/02/03/2020.02.02.931238},
-                eprint = {https://www.biorxiv.org/content/early/2020/02/03/2020.02.02.931238.full.pdf},
-                journal = {bioRxiv}
-            }
-        </citation>
+        <citation type="doi">10.1101/2020.02.02.931238</citation>
     </citations>
 </tool>
